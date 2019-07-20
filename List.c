@@ -356,3 +356,254 @@ public:
         
     }
 };
+
+#pragma once
+#include <stdio.h>
+#include <malloc.h>
+#include <assert.h>
+
+typedef int LTDataType;
+
+typedef struct ListNode
+{
+	LTDataType _data;
+	struct ListNode* _next;
+	struct ListNode* _prev;
+}ListNode;
+
+typedef struct List
+{
+	ListNode* _head;
+}List;
+
+void ListInit(List* plt);
+void ListDestroy(List* plt);
+
+void ListPushBack(List* plt, LTDataType x);
+void ListPushFront(List* plt, LTDataType x);
+void ListPopBack(List* plt);
+void ListPopFront(List* plt);
+
+ListNode* ListFind(List* plt, LTDataType x);
+// 在pos之前插入x
+void ListInsert(ListNode* pos, LTDataType x);
+// 删除pos位置的节点
+void ListErase(ListNode* pos);
+
+void ListPrint(List* plt);
+
+
+#include"Listnode.h"
+
+
+
+void ListInit(List* plt)
+{
+	assert(plt);
+
+	ListNode* head = (ListNode*)malloc(sizeof(ListNode));
+
+	head->_prev = head;
+	head->_next = head;
+
+	plt->_head = head;
+}
+ListNode* BuyListNode(LTDataType x)
+{
+	ListNode* node = (ListNode*)malloc(sizeof(ListNode));
+	node->_next = NULL;
+	node->_prev = NULL;
+	node->_data = x;
+	return node;
+}
+void ListPushBack(List* plt, LTDataType x)
+{
+	assert(plt);
+
+	
+
+	/*ListNode* head = plt->_head;
+	ListNode* tail = head->_prev;
+
+	ListNode* newnode = BuyListNode(x);
+
+	tail->_next = newnode;
+	newnode->_prev = tail;
+
+	head->_prev = newnode;
+	newnode->_next = head;*/
+	ListInsert(plt->_head, x);
+
+
+}
+void ListPopBack(List* plt)
+{
+	assert(plt);
+	ListNode* head = plt->_head;
+	assert(head->_next != head);
+	/*ListNode* head = plt->_head;
+	ListNode* tail = head->_prev;
+	ListNode* before = tail->_prev;
+
+	before->_next = head;
+	head->_prev = before;*/
+
+	ListErase(head->_prev);
+}
+
+
+void ListPushFront(List* plt, LTDataType x)
+{
+	assert(plt);
+
+	/*ListNode* newnode = (ListNode*)malloc(sizeof(ListNode));
+	newnode->_data = x;
+
+	ListNode* head = plt->_head;
+	ListNode* next = head->_next;
+
+	head->_next = newnode;
+	newnode->_prev = head;
+
+	next->_prev = newnode;
+	newnode->_next = next;*/
+	//ListNode* head = plt->_head;
+	///*ListNode* later = head->_next;
+	//ListInsert(later,x);*/
+	//assert(head->_next != head);
+	//ListInsert(head->_next, x);
+	assert(plt);
+	ListInsert(plt->_head->_next, x);
+}
+void ListPopFront(List* plt)
+{
+	assert(plt);
+
+	ListNode* head = plt->_head;
+	ListNode* first = head->_next;
+	ListNode* later = first->_next;
+
+	head->_next = later;
+	later->_prev = head;
+}
+
+ListNode* ListFind(List* plt, LTDataType x)
+{
+	assert(plt);
+	ListNode* head = plt->_head;
+	ListNode* cur = head->_next;
+
+	while (cur)
+	{
+		if (cur->_data == x)
+			return cur;
+		cur = cur->_next;
+	}
+	return NULL;
+
+}
+
+void ListInsert(ListNode* pos, LTDataType x)
+{
+	assert(pos);
+
+	ListNode* before = pos->_prev;
+
+	ListNode* newnode = (ListNode*)malloc(sizeof(ListNode));
+	newnode->_data = x;
+
+	pos->_prev = newnode;
+	newnode->_next = pos;
+
+	before->_next = newnode;
+	newnode->_prev = before;
+}
+
+
+void ListErase(ListNode* pos)
+{
+	assert(pos);
+
+	ListNode* before = pos->_prev;
+	ListNode* later = pos->_next;
+
+
+	free(pos);
+
+	before->_next = later;
+	later->_prev = before;
+
+
+}
+
+void ListDestroy(List* plt)
+{
+	assert(plt);
+
+	ListNode* head = plt->_head;
+	ListNode* cur = head->_next;
+
+	while (cur)
+	{
+		ListNode* next = cur->_next;
+		free(cur);
+		cur = next;
+	}
+	plt->_head = NULL;
+
+}
+
+
+void ListPrint(List* plt)
+{
+	assert(plt);
+
+	ListNode* head = plt->_head;
+	ListNode* cur = head->_next;
+
+	while (cur != head)
+	{
+		printf("%d ", cur->_data);
+		cur = cur->_next;
+	}
+	printf("\n");
+}
+
+#include"Listnode.h"
+
+
+
+
+int main()
+{
+	List p;
+	ListInit(&p);
+	ListPushBack(&p, 1);
+	ListPushBack(&p, 2);
+	ListPushBack(&p, 3);
+	ListPushBack(&p, 4);
+	ListPushBack(&p, 6);
+	ListPushBack(&p, 79);
+	ListPushBack(&p, 123);
+	ListPushBack(&p, 123);
+	ListPushBack(&p, 412);
+
+	ListPrint(&p);
+
+	ListPopBack(&p);
+	ListPrint(&p);
+
+	ListPushFront(&p, 2);
+	ListPrint(&p);
+
+	
+
+	ListInsert(ListFind(&p, 123), 2);
+	ListPrint(&p);
+
+
+
+
+	system("pause");
+	return 0;
+}
