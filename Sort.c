@@ -475,9 +475,9 @@ void CountingSort(int* a, int size)
 
 	int j = 0;
 
-	for (int i = 0; i < len; ++i)
+	for (int i = 0; i < len; ++i)//此处是遍历count这个数组，0-len就是他的范围
 	{
-		while (count[i]--)
+		while (count[i]--)//表示在i处有几个相同的数，直到他在某处所计数的值变为0，再去for循环他的下一个范围值
 		{
 			a[j++] = i + min;
 		}
