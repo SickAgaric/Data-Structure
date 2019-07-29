@@ -450,6 +450,42 @@ void MergeSort()
 	free(temp);
 }
 
+void CountingSort(int* a, int size)
+{
+	int min = a[0];
+	int max = a[0];
+
+	for (int i = 0; i < size; ++i)
+	{
+		if (a[i] < min)
+			min = a[i];
+		if (a[i]>max)
+			max = a[i];
+	}
+
+	int len = max - min + 1;
+	int* count = (int*)malloc(sizeof(int)*len);
+
+	memset(count, 0, sizeof(int)*len);
+
+	for (int i = 0; i < size; ++i)
+	{
+		count[a[i] - min]++;
+	}
+
+	int j = 0;
+
+	for (int i = 0; i < len; ++i)
+	{
+		while (count[i]--)
+		{
+			a[j++] = i + min;
+		}
+	}
+
+	
+	
+}
 
 
 
