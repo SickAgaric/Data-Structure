@@ -38,6 +38,7 @@ void StackCreat(Stack* ps)
 	ps->top = 0;
 	ps->capacity = 0;
 }
+
 void StackDestroy(Stack* ps)
 {
 	assert(ps);
